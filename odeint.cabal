@@ -22,3 +22,10 @@ library
   build-depends:       base, accelerate
   hs-source-dirs:      src
   default-language:    Haskell2010
+
+executable lorenz
+  hs-source-dirs:      app
+  main-is:             Lorenz.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base, odeint, accelerate
+  default-language:    Haskell2010
