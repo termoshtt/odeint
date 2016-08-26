@@ -5,7 +5,7 @@ import Numeric.LinearAlgebra
 type V = Vector Double
 
 lorenz :: V -> V -> V
-lorenz mu v = fromList [p*(y-x), x*(r-z)-y, x*y - b*z]
+lorenz mu v = vector [p*(y-x), x*(r-z)-y, x*y - b*z]
   where
     p = mu ! 0
     r = mu ! 1
@@ -16,6 +16,7 @@ lorenz mu v = fromList [p*(y-x), x*(r-z)-y, x*y - b*z]
 
 main :: IO ()
 main = do
-    let mu = fromList [10, 28, 8.0/3.0] :: V
-    let v = fromList [1, 0, 0] :: V
-    print $ lorenz mu v
+  let mu = vector [10, 28, 8.0/3.0]
+  let teo = eEuler (lorenz mu) 0.01
+  let v = vector [1, 0, 0]
+  print $ teo v
