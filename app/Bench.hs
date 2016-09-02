@@ -1,16 +1,34 @@
 
+import Odeint
+import Numeric.LinearAlgebra
 import Criterion.Main
 
-fib m | m < 0 = error "negative!"
-      | otherwise = go m
-    where
-      go 0 = 0
-      go 1 = 1
-      go n = go (n-1) + go (n-2)
+type V = Vector Double
 
+lorenz :: V -> V -> V
+lorenz mu v = vector [p*(y-x), x*(r-z)-y, x*y - b*z]
+  where
+    p = mu ! 0
+    r = mu ! 1
+    b = mu ! 2
+    x = v ! 0
+    y = v ! 1
+    z = v ! 2
+
+timeline :: (V -> V) -> V -> [V]
+timeline teo x0 = x1:timeline teo x1
+  where
+    x1 = teo x0
+
+teo :: V -> Int -> V
+teo v n = head $ drop n $ timeline l v
+  where
+    l = lorenz $ vector [10, 28, 8.0/3.0]
 
 main = defaultMain [
-  bgroup "fib" [ bench "1" $ whnf fib 1
-               , bench "5" $ whnf fib 5
-               ]
+  bgroup "Lorenz" [ bench "100000" $ nf v 100000
+                  , bench "1000000" $ nf v 1000000
+                  ]
   ]
+  where
+    v = teo (vector [1, 0, 0]) :: Int -> V
