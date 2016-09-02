@@ -3,6 +3,7 @@ module Odeint
     ( eEuler
     , rEuler
     , rk4
+    , timeline
     ) where
 
 import Numeric.LinearAlgebra
@@ -28,3 +29,9 @@ rk4 f dt vec = vec + (k1 + (k2 + k3) * scalar 2 + k4) * scalar (dt / 6)
     k2 = f $ vec + k1 * scalar (dt / 2)
     k3 = f $ vec + k2 * scalar (dt / 2)
     k4 = f $ vec + k3 * scalar dt
+
+timeline :: (V -> V) -> V -> [V]
+timeline teo x0 = x1:timeline teo x1
+  where
+    x1 = teo x0
+

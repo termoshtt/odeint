@@ -15,11 +15,6 @@ lorenz mu v = vector [p*(y-x), x*(r-z)-y, x*y - b*z]
     y = v ! 1
     z = v ! 2
 
-timeline :: (V -> V) -> V -> [V]
-timeline teo x0 = x1:timeline teo x1
-  where
-    x1 = teo x0
-
 printCSV :: [V] -> IO ()
 printCSV (v:vs) = printf "%f %f %f\n" x y z >> printCSV vs
   where

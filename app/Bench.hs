@@ -15,11 +15,6 @@ lorenz mu v = vector [p*(y-x), x*(r-z)-y, x*y - b*z]
     y = v ! 1
     z = v ! 2
 
-timeline :: (V -> V) -> V -> [V]
-timeline teo x0 = x1:timeline teo x1
-  where
-    x1 = teo x0
-
 teo :: V -> Int -> V
 teo v n = head $ drop n $ timeline l v
   where
