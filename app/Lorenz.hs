@@ -1,31 +1,40 @@
+{-# LANGUAGE BangPatterns, FlexibleContexts #-}
 
 import Odeint
-import Numeric.LinearAlgebra
-import Text.Printf
+import Data.Array.Repa as Repa
+import Criterion.Main
 
-type V = Vector Double
+data Param = Param { p :: Double, b :: Double, r :: Double } deriving (Show)
 
-lorenz :: V -> V -> V
-lorenz mu v = vector [p*(y-x), x*(r-z)-y, x*y - b*z]
+type V = Array U DIM1 Double
+
+timeline :: (V -> V) -> V -> [V]
+timeline teo v = vn:timeline teo vn
   where
-    p = mu ! 0
-    r = mu ! 1
-    b = mu ! 2
-    x = v ! 0
-    y = v ! 1
-    z = v ! 2
+    vn = teo v
 
-printCSV :: [V] -> IO ()
-printCSV (v:vs) = printf "%f %f %f\n" x y z >> printCSV vs
+lorenz :: Param -> V -> V
+lorenz mu v = fromListUnboxed (Z :. 3) [p'*(y-x), x*(r'-z)-y, x*y - b'*z]
   where
-    x = v ! 0
-    y = v ! 1
-    z = v ! 2
-printCSV [] = return ()
+    p' = p mu
+    r' = r mu
+    b' = b mu
+    x = v ! (Z :. 0)
+    y = v ! (Z :. 1)
+    z = v ! (Z :. 2)
+
+takeN :: Param -> V -> Int -> V
+takeN mu v n = head $ drop n $ timeline (lorenz mu) v
 
 main :: IO ()
-main = do
-  let mu = vector [10, 28, 8.0/3.0]
-  let teo = rk4 (lorenz mu) 0.01
-  let v = vector [1, 0, 0]
-  printCSV $ take 10000 $ timeline teo v
+main = defaultMain [
+  bgroup "Lorenz" [ bench "1k" $ whnf taken 1000
+                  , bench "10k" $ whnf taken 10000
+                  , bench "100k" $ whnf taken 100000
+                  , bench "1M" $ whnf taken 1000000
+                  ]
+  ]
+  where
+    mu = Param { p = 10, r = 28, b = 8.0/3.0 }
+    v0 = fromListUnboxed (Z :. 3) [1, 0, 0]
+    taken = takeN mu v0

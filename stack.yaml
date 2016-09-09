@@ -3,5 +3,3 @@ packages:
 - '.'
 extra-deps: []
 resolver: lts-5.13
-docker:
-  enable: true

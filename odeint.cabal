@@ -10,7 +10,7 @@ cabal-version:       >=1.10
 
 library
   exposed-modules:     Odeint
-  build-depends:       base, hmatrix
+  build-depends:       base, repa
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -18,13 +18,5 @@ executable lorenz
   hs-source-dirs:      app
   main-is:             Lorenz.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base, odeint, hmatrix
-  default-language:    Haskell2010
-
-benchmark bench_lorenz
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      app
-  main-is:             Bench.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base, odeint, hmatrix, criterion
+  build-depends:       base, odeint, repa, criterion
   default-language:    Haskell2010
