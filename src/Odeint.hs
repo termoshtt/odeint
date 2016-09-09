@@ -1,37 +1,16 @@
+{-# LANGUAGE BangPatterns #-}
 
 module Odeint
     ( eEuler
-    , rEuler
-    , rk4
-    , timeline
     ) where
 
-import Numeric.LinearAlgebra
+import Data.Array.Repa as Repa
 
-type V = Vector Double
-
-eEuler :: (V -> V) -> Double -> V -> V
-eEuler f dt vec = vec + dx
+eEuler :: (Num a, Shape sh, Source r1 a, Source r2 a)
+       => (Array r1 sh a -> Array r2 sh a)
+       -> a
+       -> Array r1 sh a
+       -> Array D sh a
+eEuler f dt vec = Repa.zipWith (\ v x -> v + dt * x) vec dx
   where
-    dx = (f vec) * scalar dt
-
-rEuler :: (V -> V) -> Double -> V -> V
-rEuler f dt vec = l1 + k2
-  where
-    k1 = f vec * scalar (dt / 2)
-    k2 = f l1 * scalar (dt / 2)
-    l1 = vec + k1
-
-rk4 :: (V -> V) -> Double -> V -> V
-rk4 f dt vec = vec + (k1 + (k2 + k3) * scalar 2 + k4) * scalar (dt / 6)
-  where
-    k1 = f vec
-    k2 = f $ vec + k1 * scalar (dt / 2)
-    k3 = f $ vec + k2 * scalar (dt / 2)
-    k4 = f $ vec + k3 * scalar dt
-
-timeline :: (V -> V) -> V -> [V]
-timeline teo x0 = x1:timeline teo x1
-  where
-    x1 = teo x0
-
+    !dx = f vec
