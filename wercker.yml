@@ -1,4 +1,4 @@
-box: fpco/stack-build
+box: fpco/stack-build:lts-5.13
 build:
   steps:
     - script:
