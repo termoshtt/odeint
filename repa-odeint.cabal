@@ -1,4 +1,4 @@
-name:                odeint
+name:                repa-odeint
 version:             0.1.0.0
 license:             GPL-3
 license-file:        LICENSE
@@ -9,7 +9,7 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Odeint
+  exposed-modules:     Numeric.Odeint
   build-depends:       base, repa
   hs-source-dirs:      src
   default-language:    Haskell2010
@@ -18,5 +18,5 @@ executable lorenz
   hs-source-dirs:      app
   main-is:             Lorenz.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
-  build-depends:       base, odeint, repa, criterion
+  build-depends:       base, repa-odeint, repa, criterion
   default-language:    Haskell2010
