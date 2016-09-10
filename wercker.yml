@@ -1,0 +1,7 @@
+box: fpco/stack-build:lts-5.13
+build:
+  steps:
+    - script:
+        name: stack
+        code: |
+          stack build
