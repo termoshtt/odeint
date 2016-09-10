@@ -1,6 +1,6 @@
 {-# LANGUAGE BangPatterns #-}
 
-module Odeint
+module Numeric.Odeint
     ( eEuler
     , rEuler
     , rk4

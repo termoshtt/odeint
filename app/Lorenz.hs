@@ -1,6 +1,6 @@
 {-# LANGUAGE BangPatterns, FlexibleContexts #-}
 
-import Odeint
+import Numeric.Odeint
 import Data.Array.Repa as Repa
 import Criterion.Main
 
