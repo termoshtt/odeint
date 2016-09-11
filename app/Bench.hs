@@ -13,4 +13,4 @@ main = defaultMain [
   where
     teo = lorenz63 (10, 28, 8.0/3.0)
     v0 = fromListUnboxed (Z :. 3) [1, 0, 0]
-    takeNth = \ n -> (timeSeries teo v0) !! n
+    takeNth = \ n -> (iterate teo v0) !! n

@@ -5,7 +5,6 @@ module Numeric.Odeint
     , eEuler
     , rEuler
     , rk4
-    , timeSeries
     ) where
 
 import Data.Array.Repa as Repa
@@ -35,8 +34,3 @@ rk4 f dt vec = computeS $ (xpy $ dt/6.0) vec $ (xpy 2.0) (k1 +^ k4) (k2 +^ k3)
     k3 = f l2
     l3 = computeS $ (xpy dt) vec k3
     k4 = f l3
-
-timeSeries :: (Shape sh) => (DArray sh -> DArray sh) -> DArray sh -> [DArray sh]
-timeSeries teo !v = vn:timeSeries teo vn
-  where
-    !vn = teo v
