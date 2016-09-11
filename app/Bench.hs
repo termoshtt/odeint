@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns, FlexibleContexts #-}
 
 import Numeric.Odeint
 import Numeric.Odeint.Examples
