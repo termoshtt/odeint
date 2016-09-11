@@ -6,12 +6,7 @@ import Criterion.Main
 
 data Param = Param { p :: Double, b :: Double, r :: Double } deriving (Show)
 
-type V = Array U DIM1 Double
-
-timeline :: (V -> V) -> V -> [V]
-timeline teo v = vn:timeline teo vn
-  where
-    vn = teo v
+type V = DArray DIM1
 
 lorenz :: Param -> V -> V
 lorenz mu v = fromListUnboxed (Z :. 3) [p'*(y-x), x*(r'-z)-y, x*y - b'*z]
@@ -24,7 +19,7 @@ lorenz mu v = fromListUnboxed (Z :. 3) [p'*(y-x), x*(r'-z)-y, x*y - b'*z]
     z = v ! (Z :. 2)
 
 takeN :: Param -> V -> Int -> V
-takeN mu v n = head $ drop n $ timeline teo v
+takeN mu v n = head $ drop n $ timeSeries teo v
   where
     teo = rk4 (lorenz mu) 0.01
 
